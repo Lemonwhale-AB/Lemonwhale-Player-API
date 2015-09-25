@@ -18,6 +18,11 @@
             return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
         }
     </script>
+    <style>
+        .row {
+            margin-top: 10px;
+        }
+    </style>
 
 </head>
 <body>
@@ -69,17 +74,17 @@
     </div>
     <div class="row">
         <div class="col-md-8">
-            <button class="btn" id='btn-play'>Play</button>
-            <button class="btn" id='btn-pause'>Pause</button>
-            <button class="btn" id='btn-isplaying'>getIsPlaying</button>
-            <button class="btn" id='btn-getvolume'>getVolume</button>
-            <button class="btn" id='btn-duration'>getDuration</button>
-            <button class="btn" id='btn-getPos'>getPosition</button>
-            <button class="btn" id='btn-getislive'>getIsLive</button>
-            <button class="btn" id='btn-getmediainfo'>getMediaInfo</button>
+            <button class="btn btn-primary" id='btn-play'>Play</button>
+            <button class="btn btn-primary" id='btn-pause'>Pause</button>
+            <button class="btn btn-primary" id='btn-isplaying'>getIsPlaying</button>
+            <button class="btn btn-primary" id='btn-getvolume'>getVolume</button>
+            <button class="btn btn-primary" id='btn-duration'>getDuration</button>
+            <button class="btn btn-primary" id='btn-getPos'>getPosition</button>
+            <button class="btn btn-primary" id='btn-getislive'>getIsLive</button>
+            <button class="btn btn-primary" id='btn-getmediainfo'>getMediaInfo</button>
         </div>
     </div>
-        <div class="row">
+    <div class="row">
         <div class="col-md-12">
          <form class="form-inline"> 
              <div class="form-group">
@@ -104,7 +109,7 @@
          <form class="form-inline"> 
              <div class="form-group">
                 <div class="input-group">
-                  <input type="text" class="form-control" id="up-input" placeholder="Up color">
+                  <input type="text" class="form-control input-small" id="up-input" placeholder="Up color">
                 </div>
                 <button type="button" id="btn-set-upcolor" class="btn btn-primary">setUpColor</button>
               </div>
@@ -119,15 +124,6 @@
         </div>
     </div>
    
-    <div class="row">
-        <div class="col-md-8">
-        
-                    <dl class="console">
-                        <dt>Console</dt>
-                        <dd><textarea class="output" readonly="readonly"></textarea><button class="clear">Clear</button></dd>
-                    </dl>
-        </div>
-    </div>
 </div>
 <script>
     function listener(event){
@@ -192,14 +188,6 @@
                     var container = document.body,
                         froogaloop = $f(player_id);
 
-                        console.log(container,container.querySelector('.console .output'));
-                    var    apiConsole = container.querySelector('.console .output');
-                    /**
-                     * Prepends log messages to the example console for you to see.
-                     */
-                    function apiLog(message) {
-                        apiConsole.innerHTML = message + '\n' + apiConsole.innerHTML;
-                    }
                     /**
                      * Sets up the actions for the buttons that will perform simple
                      * api calls to Froogaloop (play, pause, etc.). These api methods
@@ -277,67 +265,7 @@
                      * take a parameter, such as a color value when setting a color.
                      */
                     function setupModifierButtons() {
-                        var buttons = container.querySelector('div dl.modifiers'),
-                            seekBtn = buttons.querySelector('.seek'),
-                            volumeBtn = buttons.querySelector('.volume'),
-                            loopBtn = buttons.querySelector('.loop'),
-                            colorBtn = buttons.querySelector('.color'),
-                            randomColorBtn = buttons.querySelector('.randomColor');
-                        // Call seekTo when seek button clicked
-                        addEvent(seekBtn, 'click', function(e) {
-                            // Don't do anything if clicking on anything but the button (such as the input field)
-                            if (e.target != this) {
-                                return false;
-                            }
-                            // Grab the value in the input field
-                            var seekVal = this.querySelector('input').value;
-                            // Call the api via froogaloop
-                            froogaloop.api('seekTo', seekVal);
-                        }, false);
-                        // Call setVolume when volume button clicked
-                        addEvent(volumeBtn, 'click', function(e) {
-                            // Don't do anything if clicking on anything but the button (such as the input field)
-                            if (e.target != this) {
-                                return false;
-                            }
-                            // Grab the value in the input field
-                            var volumeVal = this.querySelector('input').value;
-                            // Call the api via froogaloop
-                            froogaloop.api('setVolume', volumeVal);
-                        }, false);
-                        // Call setLoop when loop button clicked
-                        addEvent(loopBtn, 'click', function(e) {
-                            // Don't do anything if clicking on anything but the button (such as the input field)
-                            if (e.target != this) {
-                                return false;
-                            }
-                            // Grab the value in the input field
-                            var loopVal = this.querySelector('input').value;
-                            //Call the api via froogaloop
-                            froogaloop.api('setLoop', loopVal);
-                        }, false);
-                        // Call setColor when color button clicked
-                        addEvent(colorBtn, 'click', function(e) {
-                            // Don't do anything if clicking on anything but the button (such as the input field)
-                            if (e.target != this) {
-                                return false;
-                            }
-                            // Grab the value in the input field
-                            var colorVal = this.querySelector('input').value;
-                            // Call the api via froogaloop
-                            froogaloop.api('setColor', colorVal);
-                        }, false);
-                        // Call setColor with a random color when random color button clicked
-                        addEvent(randomColorBtn, 'click', function(e) {
-                            // Don't do anything if clicking on anything but the button (such as the input field)
-                            if (e.target != this) {
-                                return false;
-                            }
-                            // Generate a random color
-                            var colorVal = Math.floor(Math.random() * 16777215).toString(16);
-                            // Call the api via froogaloop
-                            froogaloop.api('setColor', colorVal);
-                        }, false);
+                        
                     }
                     /**
                      * Sets up actions for buttons that will ask the player for something,
@@ -346,81 +274,7 @@
                      * parameter in that function.
                      */
                     function setupGetterButtons() {
-                        var buttons = container.querySelector('div dl.getters'),
-                            timeBtn = buttons.querySelector('.time'),
-                            durationBtn = buttons.querySelector('.duration'),
-                            colorBtn = buttons.querySelector('.color'),
-                            urlBtn = buttons.querySelector('.url'),
-                            embedBtn = buttons.querySelector('.embed'),
-                            pausedBtn = buttons.querySelector('.paused'),
-                            getVolumeBtn = buttons.querySelector('.getVolume'),
-                            widthBtn = buttons.querySelector('.width'),
-                            heightBtn = buttons.querySelector('.height');
-                        // Get the current time and log it to the API console when time button clicked
-                        addEvent(timeBtn, 'click', function(e) {
-                            froogaloop.api('getCurrentTime', function (value, player_id) {
-                                // Log out the value in the API Console
-                                apiLog('getCurrentTime : ' + value);
-                            });
-                        }, false);
-                        // Get the duration and log it to the API console when time button clicked
-                        addEvent(durationBtn, 'click', function(e) {
-                            froogaloop.api('getDuration', function (value, player_id) {
-                                // Log out the value in the API Console
-                                apiLog('getDuration : ' + value);
-                            });
-                        }, false);
-                        // Get the embed color and log it to the API console when time button clicked
-                        addEvent(colorBtn, 'click', function(e) {
-                            froogaloop.api('getColor', function (value, player_id) {
-                                // Log out the value in the API Console
-                                apiLog('getColor : ' + value);
-                            });
-                        }, false);
-                        // Get the video url and log it to the API console when time button clicked
-                        addEvent(urlBtn, 'click', function(e) {
-                            froogaloop.api('getVideoUrl', function (value, player_id) {
-                                // Log out the value in the API Console
-                                apiLog('getVideoUrl : ' + value);
-                            });
-                        }, false);
-                        // Get the embed code and log it to the API console when time button clicked
-                        addEvent(embedBtn, 'click', function(e) {
-                            froogaloop.api('getVideoEmbedCode', function (value, player_id) {
-                                // Use html entities for less-than and greater-than signs
-                                value = value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                                // Log out the value in the API Console
-                                apiLog('getVideoEmbedCode : ' + value);
-                            });
-                        }, false);
-                        // Get the paused state and log it to the API console when time button clicked
-                        addEvent(pausedBtn, 'click', function(e) {
-                            froogaloop.api('paused', function (value, player_id) {
-                                // Log out the value in the API Console
-                                apiLog('paused : ' + value);
-                            });
-                        }, false);
-                        // Get the paused state and log it to the API console when time button clicked
-                        addEvent(getVolumeBtn, 'click', function(e) {
-                            froogaloop.api('getVolume', function (value, player_id) {
-                                // Log out the value in the API Console
-                                apiLog('volume : ' + value);
-                            });
-                        }, false);
-                        // Get the paused state and log it to the API console when time button clicked
-                        addEvent(widthBtn, 'click', function(e) {
-                            froogaloop.api('getVideoWidth', function (value, player_id) {
-                                // Log out the value in the API Console
-                                apiLog('getVideoWidth : ' + value);
-                            });
-                        }, false);
-                        // Get the paused state and log it to the API console when time button clicked
-                        addEvent(heightBtn, 'click', function(e) {
-                            froogaloop.api('getVideoHeight', function (value, player_id) {
-                                // Log out the value in the API Console
-                                apiLog('getVideoHeight : ' + value);
-                            });
-                        }, false);
+                        
                     }
                     /**
                      * Adds listeners for the events that are checked. Adding an event
@@ -558,15 +412,6 @@
                         }
                     }
                     setupSimpleButtons();
-                    //setupModifierButtons();
-                    //setupGetterButtons();
-                    //setupEventListeners();
-                    //setupAddClip();
-                    // Setup clear console button
-                    var clearBtn = container.querySelector('.console button');
-                   /* addEvent(clearBtn, 'click', function(e) {
-                        apiConsole.innerHTML = '';
-                    }, false);*/
                     apiLog(player_id + ' ready!');
                 }
             })();
