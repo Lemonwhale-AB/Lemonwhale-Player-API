@@ -19,7 +19,15 @@ All events that is sent by the player on available though the API.
 
 | Media Event        | Description           | Data  |
 | ------------- |:-------------:| -----:|
+| getVolume | Return the volume in decimal format | 0-1.0 |
+| setVolume | Set the volume in decimal format | 0-1.0 |
+| getPosition | Return the current position in seconds | integer |
+| setPosition | Set the current position in seconds | integer |
+| getDuration | Return the duration of the playing media in seconds | integer |
+| getMediaInfo | Return a JSON-data about the current media | JSON-data |
 | getIsPlaying | Return if the media is playing | true/false |
+| setIsPlaying | Set if the media to playing or not. Eg. play/pause | true/false |
+| getIsLive | Return if the media a livecast or not | true/false |
 
 | Ad Event        | Description           | Data  |
 | ------------- |:-------------:| -----:|
