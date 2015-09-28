@@ -1,4 +1,3 @@
-// Init style shamelessly stolen from jQuery http://jquery.com
 var LemonwhaleAPI = (function(){
     // Define a local copy of LemonwhaleAPI
     function LemonwhaleAPI(iframe) {
@@ -32,10 +31,11 @@ var LemonwhaleAPI = (function(){
          * @param {Array|Function} valueOrCallback params Array of parameters to pass when calling an API method
          *                                or callback function when the method returns a value.
          */
-        api: function(method, valueOrCallback) {
+        callPlayer: function(method, valueOrCallback) {
             if (!this.element || !method) {
                 return false;
             }
+
             var self = this,
                 element = self.element,
                 target_id = element.id !== '' ? element.id : null,
@@ -233,12 +233,9 @@ var LemonwhaleAPI = (function(){
     LemonwhaleAPI.fn.init.prototype = LemonwhaleAPI.fn;
 
     // Listens for the message event.
-    // W3C
     if (window.addEventListener) {
         window.addEventListener('message', onMessageReceived, false);
-    }
-    // IE
-    else {
+    } else {
         window.attachEvent('onmessage', onMessageReceived);
     }
 

@@ -29,36 +29,50 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h3>Single Video - <small> No Plugins</small></h3>
+            <h3>Lemonwhale Player API Demo</h3>
+        </div>
+        <div class="col-md-12">
+            This demo uses Lemonwhale Player API that is available on Github and can be used to communicate with Lemonwhale Flash and HTML5 players. More documentation of the API can be found <a href="https://github.com/Lemonwhale-AB/Lemonwhale-Player-API/">here</a>
         </div>
     </div>
+
     <div class="row">
-        <div class="col-md-8">
-            <table class="table table-hover">
-                <thead>
-                <tbody>
-                <tr>
-                    <th scope="row">Media Id</th>
-                    <td>8ac85551-dd93-4b6f-8a19-c032fcd1e603</td>
-                </tr>
-                <tr>
-                    <th scope="row">Media Type</th>
-                    <td>video</td>
-                </tr>
-                <tr>
-                    <th scope="row">Player Id</th>
-                    <td>86198320-5762-4625-bc4b-6405444f0921</td>
-                </tr>
-                <tr>
-                    <th scope="row">Starttime</th>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <th scope="row">Autoplay</th>
-                    <td>false</td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="col-md-12">
+         <form class="form"> 
+             <div class="form-group">
+                <div class="input-group">
+                   <label for="media-input">Media Id</label> 
+                  <input type="text" class="form-control input-small" id="media-input" value="8ac85551-dd93-4b6f-8a19-c032fcd1e603">
+                </div>
+              </div>
+
+             <div class="form-group">
+                <div class="input-group">
+                   <label for="instance-input">Player Id</label> 
+                  <input type="text" class="form-control" id="instance-input" value="86198320-5762-4625-bc4b-6405444f0921">
+                </div>
+              </div>
+             <div class="form-group">
+                <div class="input-group">
+                   <label for="starttime-input">Starttime (In seconds)</label> 
+                  <input type="text" class="form-control input-small" id="starttime-input" value="0">
+                </div>
+              </div>
+         <div class="form-group">               
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id='autoplay-checkbox'> Autoplay
+                </label>
+              </div>
+
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id='flash-checkbox'> Flash (Use Flash player instead of HTML5)
+                </label>
+              </div>
+                <button type="button" id="update-player-btn" class="btn btn-default">Update Player</button>
+              </div>
+              </form>
         </div>
     </div>
     <div class="row">
@@ -68,8 +82,9 @@
                 <iframe id="player-1" class="embed-responsive-item" src="http://pineapple.lwdns.net/api/video/embed.jsp?id=1e84d59b-c9d7-4b90-b0b5-e2165daf3466&pi=48dfb1a2-ed9c-494d-993f-f036a85ca0ea&html5=1" allowfullscreen mozallowfullscreen webkitallowfullscreen></iframe>
             </div>
         </div>
-        <div class="col-md-4" id="print">
-
+        <div class="col-md-4" >
+            <textarea class="form-control" rows="18" id="print"></textarea>
+            <button class="btn btn-default" id='btn-reset-log' style="margin-top:10px">Reset Log</button>
         </div>
     </div>
     <div class="row">
@@ -102,9 +117,9 @@
               </div>
         </form>
         </div>
-        </div>
+    </div>
 
-        <div class="row">
+    <div class="row">
         <div class="col-md-12">
          <form class="form-inline"> 
              <div class="form-group">
@@ -125,36 +140,15 @@
     </div>
    
 </div>
-<script>
-    function listener(event){
-        var data = '';
-        var jsonData = event.data
-        if(jsonData.data !== undefined){
-            for(var i=0 ;i<jsonData.data.length;i++){
-                data += jsonData.data[i] + "\t";
-            }
-        }
-        
-        var newcontent = document.createElement('p');
-        newcontent.innerHTML = "<samp><small>received: "+jsonData.method+" "+data+"</small></samp>";
-        document.getElementById("print").appendChild( newcontent );//+= "><samp><small >+ "</small></samp></p>";
-    }
-
-    if (window.addEventListener){
-        addEventListener("message", listener, false)
-    } else {
-        attachEvent("onmessage", listener)
-    }
-</script>
 
 <script>
+
             (function(){
                 // Listen for the ready event for any vimeo video players on the page
-                var vimeoPlayers = document.querySelectorAll('iframe'),
+                var players = document.querySelectorAll('iframe'),
                     player;
-                for (var i = 0, length = vimeoPlayers.length; i < length; i++) {
-                    console.log('player'+i)
-                    player = vimeoPlayers[i];
+                for (var i = 0, length = players.length; i < length; i++) {
+                    player = players[i];
                     $f(player).addEvent('ready', ready);
                 }
                 /**
@@ -163,7 +157,6 @@
                  * IE's (attachEvent).
                  */
                 function addEvent(element, eventName, callback) {
-                    console.log('add event', element, eventName, callback);
                     if (element.addEventListener) {
                         element.addEventListener(eventName, callback, false);
                     }
@@ -171,6 +164,36 @@
                         element.attachEvent(eventName, callback, false);
                     }
                 }
+                  function setupLogging(){     
+                        document.getElementById('btn-reset-log').addEventListener("click", function(){
+
+                            document.getElementById("print").value = '';    
+                        });
+
+
+                        function listener(event){
+                             console.log('listerner')
+                                var data = '';
+                                var jsonData = event.data
+                                if(jsonData.data !== undefined){
+                                    for(var i=0 ;i<jsonData.data.length;i++){
+                                        data += jsonData.data[i] + "\t";
+                                    }
+                                }
+                                
+                                var newcontent  = "received: "+jsonData.method+" "+data;
+                                document.getElementById("print").value = ( newcontent +'\n' + document.getElementById("print").value ) ;
+                        }
+
+                        if (window.addEventListener){
+                            addEventListener("message", listener, false)
+                        } else {
+                            attachEvent("onmessage", listener)
+                        }
+                    };
+
+                    setupLogging();
+
                 /**
                  * Called once a vimeo player is loaded and ready to receive
                  * commands. You can add events and make api calls only after this
@@ -181,19 +204,10 @@
                     if(player_id==undefined || player_id.length==0){
                         player_id = 'player-1';
                     }
-
-                    console.log('ready' + player_id);
-                    console.log(document.getElementById(player_id))
-                    // Keep a reference to Froogaloop for this player
+                    // Keep a reference to LemonwhaleAPI for this player
                     var container = document.body,
-                        froogaloop = $f(player_id);
+                        playerAPI = $f(player_id);
 
-                    /**
-                     * Sets up the actions for the buttons that will perform simple
-                     * api calls to Froogaloop (play, pause, etc.). These api methods
-                     * are actions performed on the player that take no parameters and
-                     * return no values.
-                     */
                     function setupSimpleButtons() {
                         var buttons = container.querySelector('div dl.simple'),
                             playBtn = document.getElementById("btn-play"),
@@ -210,209 +224,81 @@
                             setUpColor = document.getElementById("btn-set-upcolor")
                         // Call play when play button clicked
                         addEvent(playBtn, 'click', function() {
-                            froogaloop.api('setIsPlaying',true);
+                            playerAPI.callPlayer('setIsPlaying',true);
                         }, false);
                         // Call pause when pause button clicked
                         addEvent(pauseBtn, 'click', function() {
-                            froogaloop.api('setIsPlaying',false);
+                            playerAPI.callPlayer('setIsPlaying',false);
                         }, false);
                         // Ask player for position in Video
                         addEvent(getPositionBtn, 'click', function() {
-                            froogaloop.api('getPosition');
+                            playerAPI.callPlayer('getPosition');
                         }, false);
                         // Ask player if media is playing
                         addEvent(isPlayingBtn, 'click', function() {
-                            froogaloop.api('getIsPlaying');
+                            playerAPI.callPlayer('getIsPlaying');
                         }, false);
                         // Ask player if media is playing
                         addEvent(getVolume, 'click', function() {
-                            froogaloop.api('getVolume');
+                            playerAPI.callPlayer('getVolume');
                         }, false);
                         // Ask player for duration
                         addEvent(getDuration, 'click', function() {
-                            froogaloop.api('getDuration');
+                            playerAPI.callPlayer('getDuration');
                         }, false);
                         // Ask player for media info
                         addEvent(getMediaInfo, 'click', function() {
-                            froogaloop.api('getMediaInfo');
+                            playerAPI.callPlayer('getMediaInfo');
                         }, false);
+
                         // Ask player if it's a livecast
                         addEvent(getIsLive, 'click', function() {
-                            froogaloop.api('getIsLive');
-                        }, false);       
-                         // Ask player if it's a livecast
+                            playerAPI.callPlayer('getIsLive');
+                        }, false);      
+
+                        // Set playback position
                         addEvent(setPosition, 'click', function() {
                             var value = document.getElementById('position-input').value;
-                            froogaloop.api('setPosition', value);
-                        }, false);     // Ask player if it's a livecast
+                            playerAPI.callPlayer('setPosition', value);
+                        }, false);  
+
+                        // Set volume
                         addEvent(setVolume, 'click', function() {
                             var value = document.getElementById('volume-input').value;
-                            froogaloop.api('setVolume', value);
+                            playerAPI.callPlayer('setVolume', value);
                         }, false);
-                         // Ask player if it's a livecast
+
+                         // Set color on player
                         addEvent(setHoverColor, 'click', function() {
                             var value = document.getElementById('hover-input').value;
-                            froogaloop.api('setHoverColor', value);
-                        }, false);     // Ask player if it's a livecast
+                            playerAPI.callPlayer('setHoverColor', value);
+                        }, false);    
+
+                         // Set color on player
                         addEvent(setUpColor, 'click', function() {
                             var value = document.getElementById('up-input').value;
-                            froogaloop.api('setUpColor', value);
+                            playerAPI.callPlayer('setUpColor', value);
                         }, false);
                     }
-                    /**
-                     * Sets up the actions for the buttons that will modify certain
-                     * things about the player and the video in it. These methods
-                     * take a parameter, such as a color value when setting a color.
-                     */
-                    function setupModifierButtons() {
-                        
-                    }
-                    /**
-                     * Sets up actions for buttons that will ask the player for something,
-                     * such as the current time or duration. These methods require a
-                     * callback function which will be called with any data as the first
-                     * parameter in that function.
-                     */
-                    function setupGetterButtons() {
-                        
-                    }
-                    /**
-                     * Adds listeners for the events that are checked. Adding an event
-                     * through Froogaloop requires the event name and the callback method
-                     * that is called once the event fires.
-                     */
-                    function setupEventListeners() {
-                        var checkboxes = container.querySelector('.listeners'),
-                            loadProgressChk = checkboxes.querySelector('.loadProgress'),
-                            playProgressChk = checkboxes.querySelector('.playProgress'),
-                            playChk = checkboxes.querySelector('.play'),
-                            pauseChk = checkboxes.querySelector('.pause'),
-                            finishChk = checkboxes.querySelector('.finish'),
-                            seekChk = checkboxes.querySelector('.seek');
-                        function onLoadProgress() {
-                            if (loadProgressChk.checked) {
-                                froogaloop.addEvent('loadProgress', function(data) {
-                                    apiLog('loadProgress event : ' + data.percent + ' : ' + data.bytesLoaded + ' : ' + data.bytesTotal + ' : ' + data.duration);
-                                });
-                            }
-                            else {
-                                froogaloop.removeEvent('loadProgress');
-                            }
-                        }
-                        function onPlayProgress() {
-                            if (playProgressChk.checked) {
-                                froogaloop.addEvent('playProgress', function(data) {
-                                    apiLog('playProgress event : ' + data.seconds + ' : ' + data.percent + ' : ' + data.duration);
-                                });
-                            }
-                            else {
-                                froogaloop.removeEvent('playProgress');
-                            }
-                        }
-                        function onPlay() {
-                            if (playChk.checked) {
-                                froogaloop.addEvent('play', function(data) {
-                                    apiLog('play event');
-                                });
-                            }
-                            else {
-                                froogaloop.removeEvent('play');
-                            }
-                        }
-                        function onPause() {
-                            if (pauseChk.checked) {
-                                froogaloop.addEvent('pause', function(data) {
-                                    apiLog('pause event');
-                                });
-                            }
-                            else {
-                                froogaloop.removeEvent('pause');
-                            }
-                        }
-                        function onFinish() {
-                            if (finishChk.checked) {
-                                froogaloop.addEvent('finish', function(data) {
-                                    apiLog('finish');
-                                });
-                            }
-                            else {
-                                froogaloop.removeEvent('finish');
-                            }
-                        }
-                        function onSeek() {
-                            if (seekChk.checked) {
-                                froogaloop.addEvent('seek', function(data) {
-                                    apiLog('seek event : ' + data.seconds + ' : ' + data.percent + ' : ' + data.duration);
-                                });
-                            }
-                            else {
-                                froogaloop.removeEvent('seek');
-                            }
-                        }
-                        // Listens for the checkboxes to change
-                        addEvent(loadProgressChk, 'change', onLoadProgress, false);
-                        addEvent(playProgressChk, 'change', onPlayProgress, false);
-                        addEvent(playChk, 'change', onPlay, false);
-                        addEvent(pauseChk, 'change', onPause, false);
-                        addEvent(finishChk, 'change', onFinish, false);
-                        addEvent(seekChk, 'change', onSeek, false);
-                        // Calls the change event if the option is checked
-                        // (this makes sure the checked events get attached on page load as well as on changed)
-                        onLoadProgress();
-                        onPlayProgress();
-                        onPlay();
-                        onPause();
-                        onFinish();
-                        onSeek();
-                    }
-                    /**
-                     * Sets up actions for adding a new clip window to the page.
-                     */
-                    function setupAddClip() {
-                        var button = container.querySelector('.addClip'),
-                            newContainer;
-                        addEvent(button, 'click', function(e) {
-                            // Don't do anything if clicking on anything but the button (such as the input field)
-                            if (e.target != this) {
-                                return false;
-                            }
-                            // Gets the index of the current player by simply grabbing the number after the underscore
-                            var currentIndex = parseInt(player_id.split('_')[1]),
-                                clipId = button.querySelector('input').value;
-                            newContainer = resetContainer(container.cloneNode(true), currentIndex+1, clipId);
-                            container.parentNode.appendChild(newContainer);
-                            $f(newContainer.querySelector('iframe')).addEvent('ready', ready);
+
+                  
+                    function setupPlayerCreation(){
+                        document.getElementById('update-player-btn').addEventListener("click", function(){
+                            var src = 'http://pineapple.lwdns.net/api/video/embed.jsp?id=';
+                            src += document.getElementById('media-input').value;
+                            src += '&pi=' + document.getElementById('instance-input').value;
+                            src += "&startTime=" + document.getElementById('starttime-input').value;
+                            src += "&autoplay=" + document.getElementById('autoplay-checkbox').checked;
+                            src += "&html5=" + !document.getElementById('flash-checkbox').checked;
+
+                            document.getElementById('player-1').src = src;   
+                         
                         });
-                        /**
-                         * Resets the duplicate container's information, clearing out anything
-                         * that doesn't pertain to the new clip. It also sets the iframe to
-                         * use the new clip's id as its url.
-                         */
-                        function resetContainer(element, index, clipId) {
-                            var newHeading = element.querySelector('h2'),
-                                newIframe = element.querySelector('iframe'),
-                                newCheckBoxes = element.querySelectorAll('.listeners input[type="checkbox"]'),
-                                newApiConsole = element.querySelector('.console .output'),
-                                newAddBtn = element.querySelector('.addClip');
-                            // Set the heading text
-                            newHeading.innerText = 'Vimeo Player ' + index;
-                            // Set the correct source of the new clip id
-                            newIframe.src = 'http://player.vimeo.com/video/' + clipId + '?api=1&player_id=player_' + index;
-                            newIframe.id = 'player_' + index;
-                            // Reset all the checkboxes for listeners to be checked on
-                            for (var i = 0, length = newCheckBoxes.length, checkbox; i < length; i++) {
-                                checkbox = newCheckBoxes[i];
-                                checkbox.setAttribute('checked', 'checked');
-                            }
-                            // Clear out the API console
-                            newApiConsole.innerHTML = '';
-                            // Update the clip ID of the add clip button
-                            newAddBtn.querySelector('input').setAttribute('value', clipId);
-                            return element;
-                        }
                     }
+
+
+                    setupPlayerCreation();
                     setupSimpleButtons();
-                    apiLog(player_id + ' ready!');
                 }
             })();
         </script>
