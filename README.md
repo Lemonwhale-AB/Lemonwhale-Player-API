@@ -7,17 +7,23 @@ TODO
 #Events
 All events that is sent by the player on available though the API.
 
-| Playback Event        | Description           | Data  |Flash | HTML5 | Mobile Devices
+## Playback Event
+This is events triggered during the playback of the video or livecast.
+
+|     | Description           | Data  |Flash | HTML5 | Mobile Devices
 | ------------- |:-------------:| -----:|-----:|-----:|-----:|
 | mediaDisplay | Display of media |     [mediatype] - video or live | No | Yes | Yes |
 | mediaStart    |  Media asset is told to play | [mediatype] - video or live |No | Yes | Yes |
 | mediaStartsToPlay     |  Media asset actually start to play      |   [mediatype] - video or live  |No | Yes | Yes |
 | mediaPaused | Media asset has been paused |     [mediatype] - video or live |No | Yes | Yes |
 | mediaEnded | Media asset has ended |     [mediatype] - video or live |No | Yes | Yes |
-| mediaQuartile | A quatile of media is played |     [mediatype] - video or live<br/>[quartile] - 0,25,50,75,100% of video |No | Yes | Yes |
+| mediaQuartile | A quatile of media is played, not possible during live |     [mediatype] - video <br/>[quartile] - 0,25,50,75,100% of video |No | Yes | Yes |
 | playbackError | A playback error has occurred | |No | Yes | Yes |
 
-| Media Event        | Description           | Data  | Flash | HTML5 | Mobile Devices
+## Media Event
+These events can be used to communicate with the player.
+
+|       | Description           | Data  | Flash | HTML5 | Mobile Devices
 | ------------- |:-------------:| -----:|-----:|-----:|-----:|
 | getVolume | Return the volume in decimal format | 0-1.0 | Yes | Yes | No |
 | setVolume | Set the volume in decimal format | 0-1.0 | Yes | Yes | No |
@@ -29,7 +35,10 @@ All events that is sent by the player on available though the API.
 | setIsPlaying | Set if the media to playing or not. Eg. play/pause | true/false | Yes | Yes | Yes |
 | getIsLive | Return if the media a livecast or not | true/false | Yes | Yes | Yes |
 
-| Ad Event        | Description           | Data  |Flash | HTML5 | Mobile Devices
+## Ad Event
+These events are triggered when playing ads in the player.
+
+|         | Description           | Data  |Flash | HTML5 | Mobile Devices
 | ------------- |:-------------:| -----:|-----:|-----:|-----:|
 | adStart | Ad is told to play |[mediatype] - video or live<br/>playertype - HTML5 or Flash<br/> Adservername <br/>starttime in millis| No | Yes | Yes |
 | adeEnded | An ad has ended |[mediatype] - video or live|No | Yes | Yes |
