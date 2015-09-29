@@ -18,7 +18,6 @@ var LemonwhaleAPI = (function(){
             if (typeof iframe === "string") {
                 iframe = document.getElementById(iframe);
             }
-
             this.element = iframe;
 
             return this;
@@ -31,16 +30,21 @@ var LemonwhaleAPI = (function(){
          * @param {Array|Function} valueOrCallback params Array of parameters to pass when calling an API method
          *                                or callback function when the method returns a value.
          */
+
         callPlayer: function(method, valueOrCallback) {
             if (!this.element || !method) {
                 return false;
             }
 
+            console.log('this 3',this.element,typeof Object.prototype.toString.call( this.element ));
+           
+            console.log('this 1',this.element);
             var self = this,
                 element = self.element,
                 target_id = element.id !== '' ? element.id : null,
                 params = !isFunction(valueOrCallback) ? valueOrCallback : null,
                 callback = isFunction(valueOrCallback) ? valueOrCallback : null;
+
 
             // Store the callback for get functions
             if (callback) {
@@ -50,6 +54,66 @@ var LemonwhaleAPI = (function(){
             postMessage(method, params, element);
 
             return self;
+        },
+
+        //Start to play.
+        play: function(){
+            this.callPlayer('setIsPlaying',true);
+        },
+
+        //Pause the media playback.
+        pause: function(){
+            this.callPlayer('setIsPlaying',false);
+        },
+
+        //Return the duration of current media asset. Will return NaN or 0 before the assets starts to play.
+        getDuration: function(callback){
+            this.callPlayer('getDuration', callback);
+        },
+
+        //Return the current volume in decimal format between 0-1.0.
+        getVolume: function(callback){
+            this.callPlayer('getVolume', callback);
+        },
+
+        //Receive JSON-data with information about the media asset.
+        getMediaInfo: function(callback){
+            this.callPlayer('getMediaInfo', callback);
+        },
+
+        //This method returns false if video is paused or ended and true if it's playing.
+        getIsPlaying: function(callback){
+            this.callPlayer('getIsPlaying', callback);
+        },
+
+        //Receive the current position in video in Seconds
+        getPosition: function(callback){
+            this.callPlayer('getPosition', callback);
+        },
+
+        //Returns true if media is a livecast
+        isLive: function(callback){
+            this.callPlayer('getIsLive', callback);
+        },
+
+        //Sets the players skin color
+        setColor : function( color ){
+            this.callPlayer('setUpColor', color);
+        },
+
+        //Sets the players hover color
+        setHoverColor : function( color ){
+            this.callPlayer('setHoverColor', color);
+        },
+
+        //Sets the volume. This will not work on mobile devices, since they doesn't support volume changes in browser
+        setVolume : function( volumePercentage ){
+            this.callPlayer('setVolume', volumePercentage);
+        },
+
+        //Sets the playback position in the video. 
+        setPosition : function( newPositionInSeconds ){
+            this.callPlayer('setPosition', newPositionInSeconds);
         },
 
         /*
@@ -106,6 +170,7 @@ var LemonwhaleAPI = (function(){
      * @param target (HTMLElement): Target iframe to post the message to.
      */
     function postMessage(method, params, target) {
+       
         if (!target.contentWindow.postMessage) {
             return false;
         }
@@ -114,7 +179,7 @@ var LemonwhaleAPI = (function(){
             value: params
         };
 
-        target.contentWindow.postMessage(data, playerOrigin);
+        target.contentWindow.postMessage(data, '*');
     }
 
     /**
@@ -194,9 +259,13 @@ var LemonwhaleAPI = (function(){
      */
     function getCallback(eventName, player_id) {
         if(player_id==undefined){
-            player_id = 'player-1';
+           return;
         }
         if (player_id) {
+            if(eventCallbacks[player_id] == undefined){
+                console.log('callback undefined')
+                return;
+            }
             return eventCallbacks[player_id][eventName];
         }
         else {

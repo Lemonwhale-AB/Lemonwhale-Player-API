@@ -79,7 +79,7 @@
         <div class="col-md-8">
             <!-- 16:9 aspect ratio -->
             <div class="embed-responsive embed-responsive-16by9">
-                <iframe id="player-1" class="embed-responsive-item" src="http://pineapple.lwdns.net/api/video/embed.jsp?id=1e84d59b-c9d7-4b90-b0b5-e2165daf3466&pi=48dfb1a2-ed9c-494d-993f-f036a85ca0ea&html5=1" allowfullscreen mozallowfullscreen webkitallowfullscreen></iframe>
+                <iframe id="player-1" class="embed-responsive-item" src="http://pineapple.lwdns.net/api/video/embed.jsp?id=1e84d59b-c9d7-4b90-b0b5-e2165daf3466&pi=48dfb1a2-ed9c-494d-993f-f036a85ca0ea&html5=1&apiOn=1&playerId=player-1" allowfullscreen mozallowfullscreen webkitallowfullscreen></iframe>
             </div>
         </div>
         <div class="col-md-4" >
@@ -143,165 +143,210 @@
 
 <script>
 
-            (function(){
-                // Listen for the ready event for any vimeo video players on the page
-                var players = document.querySelectorAll('iframe'),
-                    player;
-                for (var i = 0, length = players.length; i < length; i++) {
-                    player = players[i];
-                    $f(player).addEvent('ready', ready);
+    (function(){
+            $f(document.getElementById('player-1')).addEvent('ready', ready);
+
+            /**
+            * Utility function for adding an event. Handles the inconsistencies
+            * between the W3C method for adding events (addEventListener) and
+            * IE's (attachEvent).
+            */
+            function addEvent(element, eventName, callback) {
+                if (element.addEventListener) {
+                    element.addEventListener(eventName, callback, false);
                 }
-                /**
-                 * Utility function for adding an event. Handles the inconsistencies
-                 * between the W3C method for adding events (addEventListener) and
-                 * IE's (attachEvent).
-                 */
-                function addEvent(element, eventName, callback) {
-                    if (element.addEventListener) {
-                        element.addEventListener(eventName, callback, false);
-                    }
-                    else {
-                        element.attachEvent(eventName, callback, false);
-                    }
+                else {
+                    element.attachEvent(eventName, callback, false);
                 }
-                  function setupLogging(){     
-                        document.getElementById('btn-reset-log').addEventListener("click", function(){
+            }
 
-                            document.getElementById("print").value = '';    
-                        });
+            function setupLogging(){     
 
+                //Reset logging console
+                document.getElementById('btn-reset-log').addEventListener("click", function(){
+                    document.getElementById("print").value = '';    
+                });
 
-                        function listener(event){
-                             console.log('listerner')
-                                var data = '';
-                                var jsonData = event.data
-                                if(jsonData.data !== undefined){
-                                    for(var i=0 ;i<jsonData.data.length;i++){
-                                        data += jsonData.data[i] + "\t";
-                                    }
-                                }
-                                
-                                var newcontent  = "received: "+jsonData.method+" "+data;
-                                document.getElementById("print").value = ( newcontent +'\n' + document.getElementById("print").value ) ;
+                function listener(event){
+                    console.log(event);
+                    if(event.data.method.indexOf('get')===0 || event.data.method.indexOf('set')===0){
+                        return;
+                    }
+                    var data = '';
+                    var eventData = event.data
+                    if(eventData.data !== undefined){
+                        for(var i=0 ;i<eventData.data.length;i++){
+                            data += eventData.data[i] + "\t";
                         }
+                    }
 
-                        if (window.addEventListener){
-                            addEventListener("message", listener, false)
-                        } else {
-                            attachEvent("onmessage", listener)
-                        }
-                    };
+                    printLog(eventData.method, data);
+                        
+                }
 
-                    setupLogging();
+                if (window.addEventListener){
+                    addEventListener("message", listener, false)
+                } else {
+                    attachEvent("onmessage", listener)
+                }
+            };
+
+            setupLogging();
+
+            function printLog(method, data){
+
+                var newcontent  = "received: "+method+" "+data;
+                document.getElementById("print").value = ( newcontent +'\n' + document.getElementById("print").value ) ;
+            }
+
+            /**
+             * 
+             */
+            function ready(player_id_in) {
+                var player_id = player_id_in;
+
+                if(player_id==undefined || player_id.length==0){
+                    return;
+                }
+                console.log('ready to go:' + player_id)
+                // Keep a reference to LemonwhaleAPI for this player
+                var container = document.body,
+                    player = $f(player_id);
+
+                function setupButtons() {
+                    var buttons = container.querySelector('div dl.simple'),
+                        playBtn = document.getElementById("btn-play"),
+                        pauseBtn = document.getElementById("btn-pause"),
+                        getPositionBtn = document.getElementById("btn-getPos"), 
+                        isPlayingBtn = document.getElementById("btn-isplaying"), 
+                        getVolume = document.getElementById("btn-getvolume"),
+                        getDuration = document.getElementById("btn-duration"),
+                        getMediaInfo = document.getElementById("btn-getmediainfo"),
+                        getIsLive = document.getElementById("btn-getislive"),
+                        setPosition = document.getElementById("btn-set-position"),
+                        setVolume = document.getElementById("btn-set-volume"),
+                        setHoverColor = document.getElementById("btn-set-hovercolor"),
+                        setUpColor = document.getElementById("btn-set-upcolor");
+
+
+                    //Start to play.
+                    addEvent(playBtn, 'click', function() {
+                        //player.callPlayer('setIsPlaying',true);
+                        console.log('play-c')
+                        player.play();
+                    }, false);
+
+                    //Pause the media playback.
+                    addEvent(pauseBtn, 'click', function() {
+                        //player.callPlayer('setIsPlaying',false);
+                        player.pause();
+                    }, false);
+                    
+                    //Receive the current position in video in Seconds
+                    addEvent(getPositionBtn, 'click', function() {
+                        player.getPosition( printPosition );
+                    }, false);
+                    
+                    //This method returns false if video is paused or ended and true if it's playing.
+                    addEvent(isPlayingBtn, 'click', function() {
+                        player.getIsPlaying( printIsPlaying );
+                    }, false);
+                    
+                    //Return the current volume in decimal format between 0-1.0.
+                    addEvent(getVolume, 'click', function() {
+                        player.getVolume( printVolume );
+                    }, false);
+                    
+                    // Ask player for duration
+                    addEvent(getDuration, 'click', function() {
+                        player.getDuration( printDuration );
+                    }, false);
+                    
+                    //Receive JSON-data with information about the media asset.
+                    addEvent(getMediaInfo, 'click', function() {
+                        player.getMediaInfo( printMediaInfo );
+                    }, false);
+
+                    //Returns true if media is a livecast
+                    addEvent(getIsLive, 'click', function() {
+                        player.isLive ( printIsLive );
+                    }, false);      
+
+                    //Sets the playback position in the video. 
+                    addEvent(setPosition, 'click', function() {
+                        var positionInSeconds = document.getElementById('position-input').value;
+                        player.setPosition(positionInSeconds)
+                    }, false);  
+
+                     //Sets the volume. This will not work on mobile devices, since they doesn't support volume changes in browser
+                    addEvent(setVolume, 'click', function() {
+                        var volumeInPercent = document.getElementById('volume-input').value;
+                        player.setVolume(volumeInPercent)
+                    }, false);
+
+                    //Sets the players hover color
+                    addEvent(setHoverColor, 'click', function() {
+                        var color = document.getElementById('hover-input').value;
+                        player.setHoverColor(color)
+                    }, false);    
+
+                    //Sets the players skin color
+                    addEvent(setUpColor, 'click', function() {
+                        var color = document.getElementById('up-input').value;
+                        player.setColor(color);
+                    }, false);
+                }
 
                 /**
-                 * Called once a vimeo player is loaded and ready to receive
-                 * commands. You can add events and make api calls only after this
-                 * function has been called.
-                 */
-                function ready(player_id) {
+                ** Create a new iFrame each time click on "Update Player"
+                **/
+                function setupPlayerCreation(){
+                    document.getElementById('update-player-btn').addEventListener("click", function(){
+                        var src = 'http://pineapple.lwdns.net/api/video/embed.jsp?id=';
+                        src += document.getElementById('media-input').value;
+                        src += '&pi=' + document.getElementById('instance-input').value;
+                        src += "&startTime=" + document.getElementById('starttime-input').value;
+                        src += "&autoplay=" + document.getElementById('autoplay-checkbox').checked;
+                        src += "&html5=" + !document.getElementById('flash-checkbox').checked;
+                        src += '&apion=1&playerId=player-1';
 
-                    if(player_id==undefined || player_id.length==0){
-                        player_id = 'player-1';
-                    }
-                    // Keep a reference to LemonwhaleAPI for this player
-                    var container = document.body,
-                        playerAPI = $f(player_id);
-
-                    function setupSimpleButtons() {
-                        var buttons = container.querySelector('div dl.simple'),
-                            playBtn = document.getElementById("btn-play"),
-                            pauseBtn = document.getElementById("btn-pause"),
-                            getPositionBtn = document.getElementById("btn-getPos"), 
-                            isPlayingBtn = document.getElementById("btn-isplaying"), 
-                            getVolume = document.getElementById("btn-getvolume"),
-                            getDuration = document.getElementById("btn-duration"),
-                            getMediaInfo = document.getElementById("btn-getmediainfo"),
-                            getIsLive = document.getElementById("btn-getislive"),
-                            setPosition = document.getElementById("btn-set-position"),
-                            setVolume = document.getElementById("btn-set-volume"),
-                            setHoverColor = document.getElementById("btn-set-hovercolor"),
-                            setUpColor = document.getElementById("btn-set-upcolor")
-                        // Call play when play button clicked
-                        addEvent(playBtn, 'click', function() {
-                            playerAPI.callPlayer('setIsPlaying',true);
-                        }, false);
-                        // Call pause when pause button clicked
-                        addEvent(pauseBtn, 'click', function() {
-                            playerAPI.callPlayer('setIsPlaying',false);
-                        }, false);
-                        // Ask player for position in Video
-                        addEvent(getPositionBtn, 'click', function() {
-                            playerAPI.callPlayer('getPosition');
-                        }, false);
-                        // Ask player if media is playing
-                        addEvent(isPlayingBtn, 'click', function() {
-                            playerAPI.callPlayer('getIsPlaying');
-                        }, false);
-                        // Ask player if media is playing
-                        addEvent(getVolume, 'click', function() {
-                            playerAPI.callPlayer('getVolume');
-                        }, false);
-                        // Ask player for duration
-                        addEvent(getDuration, 'click', function() {
-                            playerAPI.callPlayer('getDuration');
-                        }, false);
-                        // Ask player for media info
-                        addEvent(getMediaInfo, 'click', function() {
-                            playerAPI.callPlayer('getMediaInfo');
-                        }, false);
-
-                        // Ask player if it's a livecast
-                        addEvent(getIsLive, 'click', function() {
-                            playerAPI.callPlayer('getIsLive');
-                        }, false);      
-
-                        // Set playback position
-                        addEvent(setPosition, 'click', function() {
-                            var value = document.getElementById('position-input').value;
-                            playerAPI.callPlayer('setPosition', value);
-                        }, false);  
-
-                        // Set volume
-                        addEvent(setVolume, 'click', function() {
-                            var value = document.getElementById('volume-input').value;
-                            playerAPI.callPlayer('setVolume', value);
-                        }, false);
-
-                         // Set color on player
-                        addEvent(setHoverColor, 'click', function() {
-                            var value = document.getElementById('hover-input').value;
-                            playerAPI.callPlayer('setHoverColor', value);
-                        }, false);    
-
-                         // Set color on player
-                        addEvent(setUpColor, 'click', function() {
-                            var value = document.getElementById('up-input').value;
-                            playerAPI.callPlayer('setUpColor', value);
-                        }, false);
-                    }
-
-                  
-                    function setupPlayerCreation(){
-                        document.getElementById('update-player-btn').addEventListener("click", function(){
-                            var src = 'http://pineapple.lwdns.net/api/video/embed.jsp?id=';
-                            src += document.getElementById('media-input').value;
-                            src += '&pi=' + document.getElementById('instance-input').value;
-                            src += "&startTime=" + document.getElementById('starttime-input').value;
-                            src += "&autoplay=" + document.getElementById('autoplay-checkbox').checked;
-                            src += "&html5=" + !document.getElementById('flash-checkbox').checked;
-
-                            document.getElementById('player-1').src = src;   
-                         
-                        });
-                    }
-
-
-                    setupPlayerCreation();
-                    setupSimpleButtons();
+                        document.getElementById('player-1').src = src;   
+                     
+                    });
                 }
-            })();
-        </script>
+
+                /** Callback functions for API get-calls **/
+                function printDuration (data){
+                    printLog('getDuration', data[0])
+                }
+
+                function printVolume (data){
+                    printLog('getVolume', data[0])
+                }
+
+                function printIsPlaying (data){
+                    printLog('getIsPlaying', data[0])
+                }
+
+                function printPosition (data){
+                    printLog('getPosition', data[0])
+                }
+
+                function printIsLive (data){
+                    printLog('getIsLive', data[0])
+                }
+
+                function printMediaInfo (data){
+                    printLog('getMediaInfo', data[0])
+                }
+
+
+                //Setup demo functionallity
+                setupPlayerCreation();
+                setupButtons();
+            }
+    })();
+</script>
 
 </body>
 </html>
