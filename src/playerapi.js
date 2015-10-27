@@ -115,6 +115,12 @@ var LemonwhaleAPI = (function(){
         setPosition : function( newPositionInSeconds ){
             this.callPlayer('setPosition', newPositionInSeconds);
         },
+        
+        //Sets chapters
+        setChapters : function( chapters ){
+            this.callPlayer('setChapters', chapters);
+        },
+
 
         /*
          * Registers an event listener and a callback function that gets called when the event fires.
