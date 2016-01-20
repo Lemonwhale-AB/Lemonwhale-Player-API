@@ -36,13 +36,20 @@ var LemonwhaleAPI = (function(){
                 return false;
             }
 
+
             console.log('this 3',this.element,typeof Object.prototype.toString.call( this.element ));
            
             console.log('this 1',this.element);
             var self = this,
-                element = self.element,
-                target_id = element.id !== '' ? element.id : null,
-                params = !isFunction(valueOrCallback) ? valueOrCallback : null,
+                element = self.element;
+
+
+            if(Object.prototype.toString.call( element ) === '[object Array]'){
+                element = document.getElementById(element[0]);
+            }
+
+            var target_id = element.id !== '' ? element.id : null;
+            var params = !isFunction(valueOrCallback) ? valueOrCallback : null,
                 callback = isFunction(valueOrCallback) ? valueOrCallback : null;
 
 
@@ -176,6 +183,10 @@ var LemonwhaleAPI = (function(){
      * @param target (HTMLElement): Target iframe to post the message to.
      */
     function postMessage(method, params, target) {
+        if(Object.prototype.toString.call( target ) === '[object Array]'){
+            target = document.getElementById(target[0]);
+        }
+
        
         if (!target.contentWindow.postMessage) {
             return false;
