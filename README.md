@@ -25,6 +25,7 @@ This is events triggered during the playback of the video or livecast.
 | ------------- |:-------------:| -----:|-----:|-----:|-----:|
 | mediaDisplay | Display of media |     [mediatype] - video or live | No | Yes | Yes |
 | mediaStart    |  Media asset is told to play | [mediatype] - video or live |No | Yes | Yes |
+| mediaResume    |  Media asset resumes after pause | [mediatype] - video or live |No | Yes | Yes |
 | mediaStartsToPlay     |  Media asset actually start to play      |   [mediatype] - video or live  |No | Yes | Yes |
 | mediaPaused | Media asset has been paused |     [mediatype] - video or live |No | Yes | Yes |
 | mediaEnded | Media asset has ended |     [mediatype] - video or live |No | Yes | Yes |
