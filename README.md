@@ -8,6 +8,8 @@ A demo of the API can be found on demo.html in this repo.
 
 Initialize the player API :
 
+On the src to the iFrame-player add apiOn=1 and playerId as a query parameter. Sample: http://ljsp.lwcdn.com/api/video/embed.jsp?id={videoId}&pi={playerId}&apiOn=1&playerId=player-1 
+
 $f(document.getElementById('player-iframe-id')).addEvent('ready', ready);
 
 When ready events been received create variable player:
