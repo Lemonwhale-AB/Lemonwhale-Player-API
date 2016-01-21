@@ -36,10 +36,6 @@ var LemonwhaleAPI = (function(){
                 return false;
             }
 
-
-            console.log('this 3',this.element,typeof Object.prototype.toString.call( this.element ));
-           
-            console.log('this 1',this.element);
             var self = this,
                 element = self.element;
 
