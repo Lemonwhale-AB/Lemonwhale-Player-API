@@ -4,7 +4,7 @@ Javascript API for the Lemonwhale Player
 # Installation
 Download the JS-file, playerapi.js, in this repository and include it on the page were you will embed the Lemonwhale iFrame-player.
 
-A demo of the API can be found here: xxx
+A demo of the API can be found on demo.html in this repo.
 
 Initialize the player API :
 
