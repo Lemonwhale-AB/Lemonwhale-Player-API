@@ -138,6 +138,19 @@
         </form>
         </div>
     </div>
+
+     <div class="row">
+         <div class="col-md-12">
+         <form class="form-inline"> 
+             <div class="form-group">
+                <div class="input-group">
+                  <input type="text" class="form-control input-small" id="tracking-input" placeholder="json trackingdata">
+                </div>
+                <button type="button" id="btn-set-tracking" class="btn btn-primary">setExternalTracking</button>
+              </div>
+        </form>
+        </div>
+    </div>
    
 </div>
 
@@ -242,6 +255,7 @@
                 setVolume = document.getElementById("btn-set-volume"),
                 setHoverColor = document.getElementById("btn-set-hovercolor"),
                 setUpColor = document.getElementById("btn-set-upcolor");
+                setExternalTracking = document.getElementById("btn-set-tracking");
 
 
             //Start to play.
@@ -309,6 +323,12 @@
             addEvent(setUpColor, 'click', function() {
                 var color = document.getElementById('up-input').value;
                 currentPlayer.setColor(color);
+            }, false);
+
+            //Sets external tracking data 
+            addEvent(setExternalTracking, 'click', function() {
+                var data = document.getElementById('tracking-input').value;
+                currentPlayer.setExternalTrackingData(data);
             }, false);
         }
 

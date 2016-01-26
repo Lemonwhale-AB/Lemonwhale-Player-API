@@ -124,7 +124,13 @@ var LemonwhaleAPI = (function(){
             this.callPlayer('setChapters', chapters);
         },
 
+        //Sets external trackingData. 
+        setExternalTrackingData : function( data ){
+            var jsonObject =  JSON.parse(data)
+            this.callPlayer('setExternalTrackingData',jsonObject);
+        },
 
+        
         /*
          * Registers an event listener and a callback function that gets called when the event fires.
          *

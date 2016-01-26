@@ -48,6 +48,8 @@ These events can be used to communicate with the player.
 | getIsPlaying | Return if the media is playing | true/false | Yes | Yes | Yes |
 | setIsPlaying | Set if the media to playing or not. Eg. play/pause | true/false | Yes | Yes | Yes |
 | getIsLive | Return if the media a livecast or not | true/false | Yes | Yes | Yes |
+| setChapters | Sets chapters for the current video | JSON-data | Yes | Yes | Yes |
+| setExternalTrackingData | Sets extra data nedded for tracking | JSON-data | Yes | Yes | Yes |
 
 ## Ad Event
 These events are triggered when playing ads in the player.
