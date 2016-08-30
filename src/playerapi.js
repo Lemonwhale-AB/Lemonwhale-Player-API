@@ -124,6 +124,11 @@ var LemonwhaleAPI = (function(){
             this.callPlayer('setChapters', chapters);
         },
 
+        //Start animated play
+        animatedStart : function( ){
+            this.callPlayer('animatedStart');
+        },
+
         //Sets external trackingData. 
         setExternalTrackingData : function( data ){
             var jsonObject =  JSON.parse(data)
