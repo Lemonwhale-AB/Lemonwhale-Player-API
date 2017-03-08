@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lemonwhale API In screen play demo</title>
+    
+
+ <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script type="text/javascript" src="playerapi.js"></script>
+
+    <script>
+
+        function getParameterByName(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                    results = regex.exec(location.search);
+            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+    </script>
+    <style>
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Lemonwhale Player API In Screen Demo</h3>
+        </div>
+        <div class="col-md-12">
+            This demo uses Lemonwhale Player API that is available on Github and can be used to communicate with Lemonwhale players. This example shows how to play and pause the video when it's in screen. More documentation of the API can be found <a href="https://github.com/Lemonwhale-AB/Lemonwhale-Player-API/">here</a>
+        </div>
+    </div>
+
+    <div class="row" >
+        <div class="col-md-12">
+            <form class="form"> 
+                 <div class="form-group">
+                    <div class="input-group">
+                       <label for="media-input">Media Id</label> 
+                      <input type="text" class="form-control input-small" id="media-input" value="8ac85551-dd93-4b6f-8a19-c032fcd1e603">
+                    </div>
+                  </div>
+
+                 <div class="form-group">
+                    <div class="input-group">
+                       <label for="instance-input">Player Id</label> 
+                      <input type="text" class="form-control" id="instance-input" value="86198320-5762-4625-bc4b-6405444f0921">
+                    </div>
+                  </div>
+                 <div class="form-group">
+                    <div class="input-group">
+                       <label for="starttime-input">Starttime (In seconds)</label> 
+                      <input type="text" class="form-control input-small" id="starttime-input" value="0">
+                    </div>
+                  </div>
+                <div class="form-group">               
+                    <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id='autoplay-checkbox'> Autoplay
+                    </label>
+                    </div>            
+                    <div class="checkbox">
+                    <label>
+                      <input type="checkbox" checked id='muted-checkbox'> Muted (needs to be set for autoplay on mobile devices)
+
+                    </label>
+                    </div>
+                    <button type="button" id="update-player-btn" class="btn btn-default">Update Player</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row" style="height: 600px">
+        <div class="col-md-12">
+            <p><strong>Scroll down to see the player</strong></p>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <!-- 16:9 aspect ratio -->
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe id="player-1" class="embed-responsive-item" src="http://ljsp.lwcdn.com/api/video/embed.jsp?id=8ac85551-dd93-4b6f-8a19-c032fcd1e603&pi=86198320-5762-4625-bc4b-6405444f0921&html5=1&apiOn=1&playerId=player-1&mute=1" allowfullscreen mozallowfullscreen webkitallowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="height: 1000px">
+        <div class="col-md-12">
+            <p><strong>Scroll UP to see the player</strong></p>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    (function(){
+        $f(document.getElementById('player-1')).addEvent('ready', ready);
+        var  currentPlayer;
+
+        function setupListeners(){     
+            function listener(event){
+                if(event.data.method.indexOf('get')===0 || event.data.method.indexOf('set')===0){
+                    return;
+                }   
+            }
+
+            if (window.addEventListener){
+                addEventListener("message", listener, false)
+            } else {
+                attachEvent("onmessage", listener)
+            }
+        };
+
+        setupListeners();
+
+        /**
+         *  Listens to the ready event from player.
+         */
+        function ready(player_id_in) {
+            var player_id = player_id_in;
+
+            if(player_id==undefined || player_id.length==0){
+                return;
+            }
+            console.log('ready to go:' + player_id)
+            // Keep a reference to LemonwhaleAPI for this player
+            currentPlayer = $f(player_id);
+
+            /* currentPlayer.pauseFromInScreen to determine if video is paused from the InScreen-function or because the User has click on pause-button. We want to keep track on this so we don't start playing when the user actively paused the playback.
+            This is set to true from the beginning since the user havn't press pause yet.
+            */
+            currentPlayer.pauseFromInScreen = true;
+
+            /*When the player is setup we register a listener for the scroll event that will use the "handleInScreen"-function
+            * to determine if the player is in screen or not.
+            */
+            window.addEventListener('scroll', function(){
+                handleInScreeen(currentPlayer, player_id);
+            }, false);
+
+            //Do one check if the player is in viewport from the beginning
+            handleInScreeen(currentPlayer, player_id);
+        }
+
+        function handleInScreeen(currentPlayer, playerId){
+
+            var rectPlayer = document.getElementById(playerId).getBoundingClientRect();
+            var html = document.documentElement;
+
+            /**
+            *   Calculate whether or not the player is in screen. This comparision will only return true if the hole player 
+            *   is in current viewport. You can change the values if you want it to start playing earlier or stop playing later.
+            */
+            var isInScreen = (
+              rectPlayer.top >= 0 &&
+              rectPlayer.left >= 0 &&
+              rectPlayer.bottom <= (window.innerHeight || html.clientHeight) &&
+              rectPlayer.right <= (window.innerWidth || html.clientWidth)
+            );
+
+            if( isInScreen ){
+
+                currentPlayer.getIsPlaying(function(data){
+                
+                    if(!data[0] && currentPlayer.pauseFromInScreen) {
+                        currentPlayer.pauseFromInScreen = false;
+                        currentPlayer.play();
+                    } 
+                })
+            } else {
+                currentPlayer.getIsPlaying(function(data){
+                    if(data[0]) {
+                        //Set to remember that we paused the video when the player left the viewport.
+                        currentPlayer.pauseFromInScreen = true;
+                        currentPlayer.pause();
+                    }
+                })
+            }
+     
+        }
+
+        /**
+        ** Create a new iFrame each time click on "Update Player"
+        **/
+        function setupPlayerCreation(){
+            console.log('setupPlayerCreation')
+            document.getElementById('update-player-btn').addEventListener("click", function(){
+                var src = 'http://ljsp.lwcdn.com/api/video/embed.jsp?id=';
+                src += document.getElementById('media-input').value;
+                src += '&pi=' + document.getElementById('instance-input').value;
+                src += "&startTime=" + document.getElementById('starttime-input').value;
+                src += "&autoplay=" + document.getElementById('autoplay-checkbox').checked;
+                src += "&mute=" + document.getElementById('muted-checkbox').checked;
+                src += "&html5=1";
+                src += '&apiOn=1&playerId=player-1';
+
+                document.getElementById('player-1').src = src;   
+                
+            });
+        }
+
+        //Setup demo functionallity
+        setupPlayerCreation();
+
+    })();
+
+
+</script>
+
+</body>
+</html>

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Lemonwhale Player API Demo</title>
     
 
  <!-- Latest compiled and minified CSS -->
@@ -38,48 +38,42 @@
 
     <div class="row">
         <div class="col-md-12">
-         <form class="form"> 
-             <div class="form-group">
-                <div class="input-group">
-                   <label for="media-input">Media Id</label> 
-                  <input type="text" class="form-control input-small" id="media-input" value="8ac85551-dd93-4b6f-8a19-c032fcd1e603">
-                </div>
-              </div>
+            <form class="form"> 
+                 <div class="form-group">
+                    <div class="input-group">
+                       <label for="media-input">Media Id</label> 
+                      <input type="text" class="form-control input-small" id="media-input" value="8ac85551-dd93-4b6f-8a19-c032fcd1e603">
+                    </div>
+                  </div>
 
-             <div class="form-group">
-                <div class="input-group">
-                   <label for="instance-input">Player Id</label> 
-                  <input type="text" class="form-control" id="instance-input" value="86198320-5762-4625-bc4b-6405444f0921">
+                 <div class="form-group">
+                    <div class="input-group">
+                       <label for="instance-input">Player Id</label> 
+                      <input type="text" class="form-control" id="instance-input" value="86198320-5762-4625-bc4b-6405444f0921">
+                    </div>
+                  </div>
+                 <div class="form-group">
+                    <div class="input-group">
+                       <label for="starttime-input">Starttime (In seconds)</label> 
+                      <input type="text" class="form-control input-small" id="starttime-input" value="0">
+                    </div>
+                  </div>
+                <div class="form-group">               
+                    <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id='autoplay-checkbox'> Autoplay
+                    </label>
+                    </div>
+                    <button type="button" id="update-player-btn" class="btn btn-default">Update Player</button>
                 </div>
-              </div>
-             <div class="form-group">
-                <div class="input-group">
-                   <label for="starttime-input">Starttime (In seconds)</label> 
-                  <input type="text" class="form-control input-small" id="starttime-input" value="0">
-                </div>
-              </div>
-         <div class="form-group">               
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" id='autoplay-checkbox'> Autoplay
-                </label>
-              </div>
-
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" id='flash-checkbox'> Flash (Use Flash player instead of HTML5)
-                </label>
-              </div>
-                <button type="button" id="update-player-btn" class="btn btn-default">Update Player</button>
-              </div>
-              </form>
+            </form>
         </div>
     </div>
     <div class="row">
         <div class="col-md-8">
             <!-- 16:9 aspect ratio -->
             <div class="embed-responsive embed-responsive-16by9">
-                <iframe id="player-1" class="embed-responsive-item" src="http://ljsp.lwcdn.com/api/video/embed.jsp?id=1e84d59b-c9d7-4b90-b0b5-e2165daf3466&pi=48dfb1a2-ed9c-494d-993f-f036a85ca0ea&html5=1&apiOn=1&playerId=player-1" allowfullscreen mozallowfullscreen webkitallowfullscreen></iframe>
+                <iframe id="player-1" class="embed-responsive-item" src="http://ljsp.lwcdn.com/api/video/embed.jsp?id=8ac85551-dd93-4b6f-8a19-c032fcd1e603&pi=86198320-5762-4625-bc4b-6405444f0921&html5=1&apiOn=1&playerId=player-1" allowfullscreen mozallowfullscreen webkitallowfullscreen></iframe>
             </div>
         </div>
         <div class="col-md-4" >
@@ -119,27 +113,7 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-         <form class="form-inline"> 
-             <div class="form-group">
-                <div class="input-group">
-                  <input type="text" class="form-control input-small" id="up-input" placeholder="Up color">
-                </div>
-                <button type="button" id="btn-set-upcolor" class="btn btn-primary">setUpColor</button>
-              </div>
-
-             <div class="form-group">
-                <div class="input-group">
-                  <input type="text" class="form-control" id="hover-input" placeholder="Hover color">
-                </div>
-                <button type="button" id="btn-set-hovercolor" class="btn btn-primary">setHoverColor</button>
-              </div>
-        </form>
-        </div>
-    </div>
-
-     <div class="row">
+     <div class="row" style="margin-bottom: 30px">
          <div class="col-md-12">
          <form class="form-inline"> 
              <div class="form-group">
@@ -234,9 +208,9 @@
                 return;
             }
             console.log('ready to go:' + player_id)
+
             // Keep a reference to LemonwhaleAPI for this player
             currentPlayer = $f(player_id);
-
 
         }
 
@@ -253,8 +227,6 @@
                 getIsLive = document.getElementById("btn-getislive"),
                 setPosition = document.getElementById("btn-set-position"),
                 setVolume = document.getElementById("btn-set-volume"),
-                setHoverColor = document.getElementById("btn-set-hovercolor"),
-                setUpColor = document.getElementById("btn-set-upcolor");
                 setExternalTracking = document.getElementById("btn-set-tracking");
 
 
@@ -313,18 +285,6 @@
                 currentPlayer.setVolume(volumeInPercent)
             }, false);
 
-            //Sets the players hover color
-            addEvent(setHoverColor, 'click', function() {
-                var color = document.getElementById('hover-input').value;
-                currentPlayer.setHoverColor(color)
-            }, false);    
-
-            //Sets the players skin color
-            addEvent(setUpColor, 'click', function() {
-                var color = document.getElementById('up-input').value;
-                currentPlayer.setColor(color);
-            }, false);
-
             //Sets external tracking data 
             addEvent(setExternalTracking, 'click', function() {
                 var data = document.getElementById('tracking-input').value;
@@ -343,7 +303,7 @@
                 src += '&pi=' + document.getElementById('instance-input').value;
                 src += "&startTime=" + document.getElementById('starttime-input').value;
                 src += "&autoplay=" + document.getElementById('autoplay-checkbox').checked;
-                src += "&html5=" + !document.getElementById('flash-checkbox').checked;
+                src += "&html5=1";
                 src += '&apiOn=1&playerId=player-1';
 
                 document.getElementById('player-1').src = src;   
@@ -375,7 +335,6 @@
         function printMediaInfo (data){
             printLog('getMediaInfo', data[0])
         }
-
 
         //Setup demo functionallity
         setupPlayerCreation();
