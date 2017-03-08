@@ -4,7 +4,7 @@ Javascript API for the Lemonwhale Player
 # Installation
 Download the JS-file, playerapi.js, in this repository and include it on the page were you will embed the Lemonwhale iFrame-player.
 
-A demo of the API can be found on demo.html in this repo.
+Demos of the API can be found on demo.html and demo_inscreen.html in this repo.
 
 Initialize the player API :
 
@@ -17,7 +17,7 @@ player = $f(player_id);
 
 start player with:   player.play();
    
-#Events
+# Events
 All events that is sent by the player on available though the API.
 
 ## Playback Event
@@ -25,14 +25,14 @@ This is events triggered during the playback of the video or livecast.
 
 |     | Description           | Data  |Flash | HTML5 | Mobile Devices
 | ------------- |:-------------:| -----:|-----:|-----:|-----:|
-| mediaDisplay | Display of media |     [mediatype] - video or live | No | Yes | Yes |
-| mediaStart    |  Media asset is told to play | [mediatype] - video or live |No | Yes | Yes |
-| mediaResume    |  Media asset resumes after pause | [mediatype] - video or live |No | Yes | Yes |
-| mediaStartsToPlay     |  Media asset actually start to play      |   [mediatype] - video or live  |No | Yes | Yes |
-| mediaPaused | Media asset has been paused |     [mediatype] - video or live |No | Yes | Yes |
-| mediaEnded | Media asset has ended |     [mediatype] - video or live |No | Yes | Yes |
-| mediaQuartile | A quatile of media is played, not possible during live |     [mediatype] - video <br/>[quartile] - 0,25,50,75,100% of video |No | Yes | Yes |
-| playbackError | A playback error has occurred | |No | Yes | Yes |
+| mediaDisplay | Display of media |     [mediatype] - video or live | Yes | Yes | Yes |
+| mediaStart    |  Media asset is told to play | [mediatype] - video or live |Yes | Yes | Yes |
+| mediaResume    |  Media asset resumes after pause | [mediatype] - video or live |Yes | Yes | Yes |
+| mediaStartsToPlay     |  Media asset actually start to play      |   [mediatype] - video or live  |Yes | Yes | Yes |
+| mediaPaused | Media asset has been paused |     [mediatype] - video or live |Yes | Yes | Yes |
+| mediaEnded | Media asset has ended |     [mediatype] - video or live |Yes | Yes | Yes |
+| mediaQuartile | A quatile of media is played, not possible during live |     [mediatype] - video <br/>[quartile] - 0,25,50,75,100% of video |Yes | Yes | Yes |
+| playbackError | A playback error has occurred | |Yes | Yes | Yes |
 
 ## Media Event
 These events can be used to communicate with the player.
