@@ -31,7 +31,7 @@ This is events triggered during the playback of the video or livecast.
 | mediaStartsToPlay     |  Media asset actually start to play      |   [mediatype] - video or live  |No | Yes | Yes |
 | mediaPaused | Media asset has been paused |     [mediatype] - video or live |No | Yes | Yes |
 | mediaEnded | Media asset has ended |     [mediatype] - video or live |No | Yes | Yes |
-| mediaQuartile | A quatile of media is played, not possible during live |     [mediatype] - video <br/>[quartile] - 0,25,50,75,100% of video |No | Yes | Yes |
+| mediaQuartile | A quatile of media is played, not possible during live |     [mediatype] - video <br/>[quartile] - 25,50,75% of video |No | Yes | Yes |
 | playbackError | A playback error has occurred | |No | Yes | Yes |
 
 ## Media Event
@@ -58,7 +58,7 @@ These events are triggered when playing ads in the player.
 | ------------- |:-------------:| -----:|-----:|-----:|-----:|
 | adStart | Ad is told to play |[mediatype] - video or live<br/>playertype - HTML5 or Flash<br/> Adservername <br/>starttime in millis| No | Yes | Yes |
 | adeEnded | An ad has ended |[mediatype] - video or live|No | Yes | Yes |
-| adblockStart |  An adblock is initiated |[mediatype] - video or live<br/>playertype - HTML5 or Flash<br/> Adservername|No | Yes | Yes |
-| adblockComplete | An entire block of ads has ended e.g. all prerolls has been displayed |[mediatype] - video or live|No | Yes | Yes |
+| adBlockStart |  An AdBlock is initiated |[mediatype] - video or live<br/>playertype - HTML5 or Flash<br/> Adservername|No | Yes | Yes |
+| adBlockComplete | An entire block of ads has ended e.g. all prerolls has been displayed |[mediatype] - video or live|No | Yes | Yes |
 | adError | Ad loading problems with either ad data or ad video|[mediatype] - video or live<br/>playertype - HTML5 or Flash<br/> Adservername <br/>millis since request|No | Yes | Yes |
-| adEmpty | Ad response was empty|[mediatype] - video or live<br/>playertype - HTML5 or Flash<br/> Adservername |No | Yes | Yes |
+| adEmpty | Ad response was empty. From some Ad Servers an adError is thrown instead. |[mediatype] - video or live<br/>playertype - HTML5 or Flash<br/> Adservername |No | Yes | Yes |

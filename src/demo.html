@@ -63,6 +63,11 @@
                     <label>
                       <input type="checkbox" id='autoplay-checkbox'> Autoplay
                     </label>
+                    </div>           
+                    <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id='lw-player-checkbox'> Old Lemonwhale Player
+                    </label>
                     </div>
                     <button type="button" id="update-player-btn" class="btn btn-default">Update Player</button>
                 </div>
@@ -73,7 +78,7 @@
         <div class="col-md-8">
             <!-- 16:9 aspect ratio -->
             <div class="embed-responsive embed-responsive-16by9">
-                <iframe id="player-1" class="embed-responsive-item" src="http://ljsp.lwcdn.com/api/video/embed.jsp?id=8ac85551-dd93-4b6f-8a19-c032fcd1e603&pi=86198320-5762-4625-bc4b-6405444f0921&html5=1&apiOn=1&playerId=player-1" allowfullscreen mozallowfullscreen webkitallowfullscreen></iframe>
+                <iframe id="player-1" class="embed-responsive-item" src="http://localhost:8080/api/video/embed.jsp?id=ece47d82-747b-48cb-88bc-9514603e4adc&pi=bc687bd7-5478-4ba2-8cad-a6a16f9a87b3&html5=1&apiOn=1&playerId=player-1&v=5" allowfullscreen mozallowfullscreen webkitallowfullscreen></iframe>
             </div>
         </div>
         <div class="col-md-4" >
@@ -167,7 +172,7 @@
             });
 
             function listener(event){
-                if(event.data.method.indexOf('get')===0 || event.data.method.indexOf('set')===0){
+                if(event.data.method == undefined || event.data.method.indexOf('get')===0 || event.data.method.indexOf('set')===0){
                     return;
                 }
                 var data = '';
@@ -297,12 +302,16 @@
         **/
         function setupPlayerCreation(){
             console.log('setupPlayerCreation')
+
+            var playerVersion = document.getElementById('lw-player-checkbox').checked ? 4 : 5;
+
             document.getElementById('update-player-btn').addEventListener("click", function(){
                 var src = 'http://ljsp.lwcdn.com/api/video/embed.jsp?id=';
                 src += document.getElementById('media-input').value;
                 src += '&pi=' + document.getElementById('instance-input').value;
                 src += "&startTime=" + document.getElementById('starttime-input').value;
                 src += "&autoplay=" + document.getElementById('autoplay-checkbox').checked;
+                src += "&v=" + playerVersion;
                 src += "&html5=1";
                 src += '&apiOn=1&playerId=player-1';
 
