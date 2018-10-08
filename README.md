@@ -1,14 +1,14 @@
-# Lemonwhale-Player-API
-Javascript API for the Lemonwhale Player
+# Flowplayer SDK and API
+Javascript API for Flowplayer
 
 # Installation
-Download the JS-file, playerapi.js, in this repository and include it on the page were you will embed the Lemonwhale iFrame-player.
+Download the JS-file, playerapi.js, in this repository and include it on the page were you will embed the Flowplayer iFrame-player.
 
 Demos of the API can be found on demo.html and demo_inscreen.html in this repo.
 
 Initialize the player API :
 
-On the src to the iFrame-player add apiOn=1 and playerId as a query parameter. Sample: http://ljsp.lwcdn.com/api/video/embed.jsp?id={videoId}&pi={playerId}&apiOn=1&player_id=player-1 
+On the src to the iFrame-player add apiOn=1 and playerId as a query parameter. Sample: https://play.flowplayer.com/api/video/embed.jsp?id={videoId}&pi={playerId}&apiOn=1&player_id=player-1 
 
 $f(document.getElementById('player-iframe-id')).addEvent('ready', ready);
 
