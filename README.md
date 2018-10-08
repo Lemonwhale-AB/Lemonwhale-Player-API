@@ -8,7 +8,7 @@ Demos of the API can be found on demo.html and demo_inscreen.html in this repo.
 
 Initialize the player API :
 
-On the src to the iFrame-player add apiOn=1 and playerId as a query parameter. Sample: https://play.flowplayer.com/api/video/embed.jsp?id={videoId}&pi={playerId}&apiOn=1&player_id=player-1 
+On the src to the iFrame-player add apiOn=1 and playerId as a query parameter. Sample: https://ljsp.lwcdn.com/api/video/embed.jsp?id={videoId}&pi={playerId}&apiOn=1&player_id=player-1 
 
 $f(document.getElementById('player-iframe-id')).addEvent('ready', ready);
 
