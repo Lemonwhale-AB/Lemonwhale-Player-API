@@ -4,30 +4,40 @@ Javascript API for Flowplayer
 # Installation
 Download the JS-file, playerapi.js, in this repository and include it on the page were you will embed the Flowplayer iFrame-player.
 
-Demos of the API can be found on demo.html and demo_inscreen.html in this repo.
-
 Initialize the player API :
 
 On the src to the iFrame-player add apiOn=1 and playerId as a query parameter. Sample: https://ljsp.lwcdn.com/api/video/embed.jsp?id={videoId}&pi={playerId}&apiOn=1&player_id=player-1 
 
+```js
 $f(document.getElementById('player-iframe-id')).addEvent('ready', ready);
+```
 
 When ready events been received create variable player:
-player = $f(player_id);
+```js
+player = $f('player-1');
+```
 
-start player with:   player.play();
+start player with:  
+```js
+player.play();
+```
+
+## Demos
+Demos of the API can be found on [demo.html](src/demo.html) and [demo_inscreen.html](/src/demo_inscreen.html) in this repo.
    
 # Events
 All events that is sent by the player on available though the API.
 
 ## Player Event
 Triggered by the player
+
 |     | Description           | Data   | HTML5 | Mobile Devices
-| ------------- |:-------------:| -----:|-----:|-----:|-----:|
+| ------------- |:-------------:| -----:|-----:|-----:|
 | ready | Display of media |     [mediatype] - video or live  | Yes | Yes |
 
 ## Playback Event
 Triggered during the playback of the video or livestream.
+
 |     | Description           | Data   | HTML5 | Mobile Devices
 | ------------- |:-------------:| -----:|-----:|-----:|
 | mediaDisplay | Triggered when the media is displayed |     [mediatype] - video or live | Yes | Yes |
@@ -41,6 +51,7 @@ Triggered during the playback of the video or livestream.
 
 ## Media Event
 Can be used to communicate with the player.
+
 |       | Description           | Data   | HTML5 | Mobile Devices
 | ------------- |:-------------:| -----:|-----:|-----:|
 | getVolume | Returns the volume in decimal format | 0-1.0 | Yes | No |
@@ -58,6 +69,7 @@ Can be used to communicate with the player.
 
 ## Ad Event
 Events you can listen to, that are triggered when playing ads in the player.
+
 |         | Description           | Data  |Flash | HTML5 | Mobile Devices
 | ------------- |:-------------:| -----:|-----:|-----:|-----:|
 | adStart | Triggered when the ad is played |[mediatype] - video or live<br/>playertype - HTML5 or Flash<br/> Adservername <br/>starttime in millis| No | Yes | Yes |
