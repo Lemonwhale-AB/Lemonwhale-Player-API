@@ -69,7 +69,7 @@
         <div class="col-md-8">
             <!-- 16:9 aspect ratio -->
             <div class="embed-responsive embed-responsive-16by9">
-                <iframe id="player-1" class="embed-responsive-item" src="http://ljsp.lwcdn.com/api/video/embed.jsp?id=fa94f88d-995d-426b-ae21-8f0582e18974&pi=41725339-1c7b-4f5e-9c6f-02814de788b2&autoplay=1&muted=1&apiOn=1&playerId=player-1&v=5" allowfullscreen mozallowfullscreen webkitallowfullscreen></iframe>
+                <iframe id="player-1" class="embed-responsive-item" src="http://devljsp.lwcdn.com/api/video/embed.jsp?id=4fb166d5-f567-49a4-9887-73567e45a5de&pi=a43f7e0c-833e-4524-b680-f4b53ba98577&v=5&autoplay=1&muted=1&apiOn=1&playerId=player-1&v=5" allowfullscreen mozallowfullscreen webkitallowfullscreen></iframe>
             </div><!--https://ljsp.lwcdn.com/api/video/embed.jsp?id=e2151710-0946-429f-9259-d275199dc913&pi=23449739-a65e-45e7-8285-e76b7bafaeaf&7&apiOn=1&playerId=player-1&noads=true, http://ljsp.lwcdn.com/api/video/embed.jsp?id=015b673c-be52-408b-99bd-4117031401c7&pi=ee636175-b58f-473a-aceb-4626acfb8676-->
                     </div>
         <div class="col-md-4" >
@@ -124,6 +124,18 @@
         </div>
     </div>
    
+    <div class="row" style="margin-bottom: 30px">
+         <div class="col-md-12">
+         <form class="form-inline"> 
+             <div class="form-group">
+                <div class="input-group"> 
+                  <input type="text" class="form-control input-small" id="ads-input" value='{"ads":[{"adTag": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ar%3Dpreonlybumper&cmsid=496&vid=short_onecue&correlator=","time":0}]}'>
+                </div>
+                <button type="button" id="btn-set-ads" class="btn btn-primary">setAds</button>
+              </div>
+        </form>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -176,6 +188,11 @@
                     }
                 }
 
+                //This will inject ads object directly when API is available
+                if(eventData.method === 'ready') {
+                    var adData = document.getElementById('ads-input').value;
+                    currentPlayer.setAds(adData);
+                }
                 printLog(eventData.method, data);
                     
             }
@@ -192,7 +209,8 @@
         function printLog(method, data){
 
             var newcontent  = "received: "+method+" "+data;
-            document.getElementById("print").value = ( newcontent +'\n' + document.getElementById("print").value ) ;
+            document.getElementById("print").value =
+             ( newcontent +'\n' + document.getElementById("print").value ) ;
         }
 
         var  currentPlayer;
@@ -226,7 +244,8 @@
                 setPosition = document.getElementById("btn-set-position"),
                 setVolume = document.getElementById("btn-set-volume"),
                 setMute = document.getElementById("btn-mute"),
-                setExternalTracking = document.getElementById("btn-set-tracking");
+                setExternalTracking = document.getElementById("btn-set-tracking"),
+                setAds = document.getElementById("btn-set-ads");
 
 
             //Start to play.
@@ -296,8 +315,11 @@
                 var data = document.getElementById('tracking-input').value;
                 currentPlayer.setExternalTrackingData(data);
             }, false);
-
-            $('#mute').button('toggle')
+  
+            addEvent(setAds, 'click', function() {
+                var data = document.getElementById('adobject-input').value;
+                currentPlayer.setAds(data);
+            }, false);
         }
 
         /**
