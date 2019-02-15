@@ -33,7 +33,7 @@ Triggered by the player
 
 |     | Description           | Data   | HTML5 | Mobile Devices
 | ------------- |:-------------:| -----:|-----:|-----:|
-| ready | Display of media |     [mediatype] - video or live  | Yes | Yes |
+| ready | When API is available and ready for communication |  | Yes | Yes |
 
 ## Playback Event
 Triggered during the playback of the video or livestream.
