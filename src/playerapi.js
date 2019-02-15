@@ -113,6 +113,11 @@ var LemonwhaleAPI = (function(){
         setVolume : function( volumePercentage ){
             this.callPlayer('setVolume', volumePercentage);
         },
+        
+        //Sets the volume. This will not work on mobile devices, since they doesn't support volume changes in browser
+        setMute : function( muteValue ){
+            this.callPlayer('setMute', muteValue);
+        },
 
         //Sets the playback position in the video. 
         setPosition : function( newPositionInSeconds ){
