@@ -134,6 +134,11 @@ var LemonwhaleAPI = (function(){
             var jsonObject =  JSON.parse(data)
             this.callPlayer('setExternalTrackingData',jsonObject);
         },
+        //Sets ads object. Only available for Flowplayer 7 
+        setAds : function( data ){
+            var jsonObject =  JSON.parse(data)
+            this.callPlayer('setAds',jsonObject);
+        },
 
         
         /*
